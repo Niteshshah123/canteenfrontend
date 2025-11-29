@@ -5,7 +5,7 @@ import path from 'path'
 
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => ({
-  base: mode === "production" ? "/amritacanteen/" : "/",
+  base: "/",
   plugins: [react(),tailwindcss()],
   resolve: {
     alias: {
