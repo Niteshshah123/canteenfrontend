@@ -1,15 +1,24 @@
 import { createContext, useState, useEffect } from 'react';
+import { useLocation } from "react-router-dom";
 import { authAPI } from '../services/auth';
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
+  const location = useLocation();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const publicRoutes = ['/login', '/register'];
+
+    if (publicRoutes.includes(location.pathname)) {
+      setLoading(false);
+      return;
+    }
+
     checkSession();
-  }, []);
+  }, [location.pathname]);
 
   const checkSession = async () => {
     try {
@@ -60,7 +69,6 @@ export const AuthProvider = ({ children }) => {
 
   const updateUser = (userData) => {
     setUser(userData);
-    // Optional: Update in localStorage if you're storing user data there
     if (typeof window !== 'undefined') {
       try {
         localStorage.setItem('user', JSON.stringify(userData));
